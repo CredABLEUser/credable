@@ -1,6 +1,6 @@
 # CredABLE
 
-CredABLE  is an AI-guided financial capability and leverage coach. You tell it
+CredABLE is an AI-guided financial capability and leverage coach. You tell it
 what's going on — in your own words — and it works with you through Reality →
 Options → Choice → Action, helps you organize your financial world, and
 prepares you to hand things off to a real professional when that's the right
