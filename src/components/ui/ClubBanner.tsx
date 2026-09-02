@@ -27,7 +27,7 @@ export function ClubBanner({ compact = false }: { compact?: boolean }) {
       <span key={index} className="animate-fade-hero">
         {LINES[index]}{" "}
         <Link href="/app/membership" className="font-semibold text-brand-strong underline underline-offset-2">
-          Sign up for the CLUB today!
+          Join the CLUB
         </Link>
       </span>
     );
@@ -39,7 +39,7 @@ export function ClubBanner({ compact = false }: { compact?: boolean }) {
         <p key={line}>
           {line}{" "}
           <Link href="/app/membership" className="font-semibold text-brand-strong underline underline-offset-2">
-            Sign up for the CLUB today!
+            Join the CLUB
           </Link>
         </p>
       ))}

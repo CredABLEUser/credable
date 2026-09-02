@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Chip } from "../ui/Primitives";
 import { Button } from "../ui/Button";
@@ -38,11 +38,26 @@ const STARTER_GROUPS: { label: string; examples: string[] }[] = [
   },
 ];
 
-export function LandingPrompt() {
+export function LandingPrompt({
+  initialQuestion,
+  trigger,
+}: {
+  initialQuestion?: string;
+  trigger?: number;
+} = {}) {
   const [question, setQuestion] = useState("");
   const [showHelp, setShowHelp] = useState(false);
   const [showEmail, setShowEmail] = useState(false);
   const [pending, setPending] = useState(false);
+
+  // Clicking one of the "we've got you" cards passes its text down here —
+  // jump straight into the flow instead of making them retype it.
+  useEffect(() => {
+    if (!trigger || !initialQuestion) return;
+    setQuestion(initialQuestion);
+    setShowHelp(false);
+    setShowEmail(true);
+  }, [trigger, initialQuestion]);
 
   function pickExample(text: string) {
     setQuestion(text);
