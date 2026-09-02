@@ -101,22 +101,26 @@ export function LandingPrompt() {
 
   return (
     <div className="mx-auto w-full max-w-2xl">
-      <form onSubmit={continueToSignup} className="rounded-2xl border border-border bg-white p-4 shadow-sm sm:p-6">
+      <form
+        onSubmit={continueToSignup}
+        className="rounded-3xl border border-brand/10 bg-white p-4 shadow-xl shadow-brand/10 sm:p-5"
+      >
         <textarea
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          rows={3}
+          rows={2}
           placeholder="Tell me what's going on — in your own words."
           className="w-full resize-none rounded-xl border-none bg-transparent text-base text-ink outline-none placeholder:text-ink-soft/60"
         />
-        <div className="mt-3 flex items-center justify-between gap-3">
+        <div className="mt-2 flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={() => setShowHelp((v) => !v)}
             className="flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink"
           >
             <Sparkles size={15} />
-            I&apos;m not sure — help me figure it out
+            <span className="hidden sm:inline">I&apos;m not sure — help me figure it out</span>
+            <span className="sm:hidden">Not sure?</span>
           </button>
           <Button type="submit" size="md">
             Continue <ArrowRight size={16} />
@@ -124,9 +128,9 @@ export function LandingPrompt() {
         </div>
       </form>
 
-      <div className="mt-4 flex flex-wrap justify-center gap-2">
-        {QUICK_EXAMPLES.map((ex) => (
-          <Chip key={ex} onClick={() => pickExample(ex)}>
+      <div className="mt-3 flex flex-wrap justify-center gap-2">
+        {QUICK_EXAMPLES.slice(0, 4).map((ex) => (
+          <Chip key={ex} onClick={() => pickExample(ex)} className="hidden sm:inline-flex">
             {ex}
           </Chip>
         ))}

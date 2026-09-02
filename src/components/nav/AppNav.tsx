@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { Home, AlertCircle, Target, Wallet, GraduationCap, MessageCircle, User } from "lucide-react";
 import { PRIMARY_NAV } from "@/lib/config";
+import { Wordmark } from "@/components/ui/Wordmark";
 
 const ICONS: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
   "/app": Home,
@@ -24,8 +25,8 @@ export function DesktopNav({ email }: { email?: string }) {
   const pathname = usePathname();
   return (
     <aside className="hidden md:flex md:w-56 md:flex-col md:border-r md:border-border md:bg-white/60 md:px-4 md:py-6">
-      <Link href="/app" className="mb-8 px-2 text-lg font-semibold tracking-tight text-brand-strong">
-        CredABLE
+      <Link href="/app" className="mb-8 px-2">
+        <Wordmark className="text-lg" />
       </Link>
       <nav className="flex flex-1 flex-col gap-1">
         {PRIMARY_NAV.map((item) => {

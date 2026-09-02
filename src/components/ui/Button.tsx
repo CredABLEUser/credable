@@ -6,10 +6,10 @@ type Variant = "primary" | "secondary" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const variantClasses: Record<Variant, string> = {
-  primary: "bg-brand text-white hover:bg-brand-strong",
-  secondary: "bg-white text-ink border border-border hover:border-ink-soft",
+  primary: "bg-brand text-white shadow-md shadow-brand/20 hover:bg-brand-strong hover:shadow-lg hover:shadow-brand/25 hover:-translate-y-0.5",
+  secondary: "bg-white text-ink border border-border shadow-sm hover:border-ink-soft hover:-translate-y-0.5 hover:shadow-md",
   ghost: "bg-transparent text-ink-soft hover:text-ink hover:bg-black/5",
-  danger: "bg-danger text-white hover:opacity-90",
+  danger: "bg-danger text-white shadow-md shadow-danger/20 hover:opacity-90",
 };
 
 const sizeClasses: Record<Size, string> = {
@@ -35,7 +35,7 @@ export function Button({
   return (
     <button
       className={clsx(
-        "inline-flex items-center justify-center gap-2 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+        "inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 ease-out active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none",
         variantClasses[variant],
         sizeClasses[size],
         className
@@ -58,7 +58,7 @@ export function LinkButton({
     <Link
       href={href}
       className={clsx(
-        "inline-flex items-center justify-center gap-2 font-medium transition-colors",
+        "inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 ease-out active:scale-[0.97]",
         variantClasses[variant],
         sizeClasses[size],
         className

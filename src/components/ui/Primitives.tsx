@@ -8,7 +8,7 @@ export function Card({
 }: { children: ReactNode; className?: string } & HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={clsx("rounded-2xl border border-border bg-surface p-5", className)}
+      className={clsx("rounded-2xl border border-border bg-surface p-5 shadow-sm", className)}
       {...rest}
     >
       {children}
@@ -30,10 +30,10 @@ export function Chip({
     <button
       type="button"
       className={clsx(
-        "rounded-full border px-3.5 py-1.5 text-sm transition-colors text-left",
+        "rounded-full border px-3.5 py-1.5 text-sm transition-all duration-150 ease-out text-left hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
         active
-          ? "border-brand bg-brand-soft text-brand-strong"
-          : "border-border bg-white text-ink-soft hover:border-ink-soft hover:text-ink",
+          ? "border-brand bg-brand-soft text-brand-strong shadow-sm shadow-brand/10"
+          : "border-border bg-white text-ink-soft shadow-sm hover:border-brand/40 hover:text-ink hover:shadow-md",
         className
       )}
       {...rest}
