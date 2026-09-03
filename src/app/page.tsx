@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { Compass, CheckCircle2, ArrowRight } from "lucide-react";
 import { getCurrentUser } from "@/lib/session";
 import { StartHereSection } from "@/components/chat/StartHereSection";
@@ -28,9 +27,6 @@ export default async function LandingPage() {
 
       <header className="relative flex flex-col items-start gap-2 border-b border-border/80 bg-surface/70 px-6 py-3 backdrop-blur-sm sm:flex-row sm:items-center sm:gap-4 sm:px-10 sm:py-4">
         <Wordmark className="text-3xl sm:text-4xl" />
-        <Link href="/about" className="text-xs font-medium text-ink-soft hover:text-brand-strong sm:-ml-2">
-          About
-        </Link>
         <div className="hidden h-8 w-px bg-border sm:block" />
         <div>
           <p className="text-xs font-bold uppercase tracking-wide text-brand-strong">Build credit. Master leverage.</p>
