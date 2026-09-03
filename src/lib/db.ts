@@ -2,7 +2,8 @@ import fs from "fs";
 import path from "path";
 import { DB } from "./types";
 
-// Simple file-backed JSON store.
+// Simple file-backed JSON store, with an in-memory fallback for hosting
+// environments (like Vercel) where the filesystem can't be written to.
 // This is intentionally a swap-in point: replace the read/write functions
 // below with a real database (Postgres/Prisma, etc.) without touching any
 // of the call sites, which only ever import { readDB, writeDB } from here.
@@ -25,6 +26,13 @@ function emptyDB(): DB {
   };
 }
 
+// In-memory fallback, used when the filesystem can't be written to (e.g.
+// Vercel's serverless functions). Keeps the app working for a session
+// instead of crashing; just isn't guaranteed to persist between requests
+// on a fresh server instance.
+let memoryDB: DB | null = null;
+let fsWritable = true;
+
 function ensureFile() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
   if (!fs.existsSync(DB_PATH)) {
@@ -32,24 +40,35 @@ function ensureFile() {
   }
 }
 
-// naive in-process write lock to avoid interleaved writes during a request
-let writeQueue: Promise<unknown> = Promise.resolve();
-
 export function readDB(): DB {
-  ensureFile();
-  const raw = fs.readFileSync(DB_PATH, "utf-8");
+  if (!fsWritable) return memoryDB ?? emptyDB();
   try {
+    ensureFile();
+    const raw = fs.readFileSync(DB_PATH, "utf-8");
     const parsed = JSON.parse(raw) as Partial<DB>;
     return { ...emptyDB(), ...parsed };
   } catch {
-    return emptyDB();
+    fsWritable = false;
+    return memoryDB ?? emptyDB();
   }
 }
 
 export function writeDB(db: DB): void {
-  ensureFile();
-  fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2));
+  if (!fsWritable) {
+    memoryDB = db;
+    return;
+  }
+  try {
+    ensureFile();
+    fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2));
+  } catch {
+    fsWritable = false;
+    memoryDB = db;
+  }
 }
+
+// naive in-process write lock to avoid interleaved writes during a request
+let writeQueue: Promise<unknown> = Promise.resolve();
 
 // Convenience helper: read, mutate, write, return the mutation's result.
 export async function mutateDB<T>(fn: (db: DB) => T): Promise<T> {
