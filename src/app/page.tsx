@@ -38,7 +38,7 @@ export default async function LandingPage() {
           </p>
         </div>
 
-        <div className="rounded-full bg-accent-soft/70 px-4 py-1.5 text-center text-xs text-ink-soft sm:ml-auto">
+        <div className="flex min-h-[4rem] w-full max-w-[15rem] items-center justify-center rounded-full bg-accent-soft/70 px-4 py-1.5 text-center text-xs text-ink-soft sm:ml-auto sm:w-auto sm:max-w-none">
           <ClubBanner compact />
         </div>
       </header>
