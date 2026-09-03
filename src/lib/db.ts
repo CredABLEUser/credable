@@ -7,8 +7,14 @@ import { DB } from "./types";
 // This is intentionally a swap-in point: replace the read/write functions
 // below with a real database (Postgres/Prisma, etc.) without touching any
 // of the call sites, which only ever import { readDB, writeDB } from here.
+//
+// Vercel's serverless functions can't write inside the deployed project
+// folder (process.cwd()) — that's read-only. /tmp is the one directory
+// they CAN write to, and it stays around for the life of that warm
+// function instance, which is what actually lets signup -> redirect ->
+// next page work in one sitting instead of losing the user in between.
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_DIR = process.env.VERCEL ? "/tmp/credable-data" : path.join(process.cwd(), "data");
 const DB_PATH = path.join(DATA_DIR, "db.json");
 
 function emptyDB(): DB {
