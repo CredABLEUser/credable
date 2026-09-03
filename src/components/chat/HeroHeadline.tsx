@@ -12,52 +12,36 @@ const PROMPTS = [
   "Self employed and need a loan?",
 ];
 
-const HOLD_MS = 2000;
-const ROLL_MS = 400;
-
-type Phase = "in" | "out" | "below";
+const HOLD_MS = 3200;
+const FADE_MS = 350;
 
 export function HeroHeadline() {
   const [index, setIndex] = useState(0);
-  const [phase, setPhase] = useState<Phase>("in");
+  const [visible, setVisible] = useState(true);
   const swapTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const raf1 = useRef<number | null>(null);
-  const raf2 = useRef<number | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Roll the current line up and out.
-      setPhase("out");
+      setVisible(false);
       swapTimeout.current = setTimeout(() => {
-        // Swap the text, drop it below (no transition), then roll it up into place.
         setIndex((i) => (i + 1) % PROMPTS.length);
-        setPhase("below");
-        raf1.current = requestAnimationFrame(() => {
-          raf2.current = requestAnimationFrame(() => setPhase("in"));
-        });
-      }, ROLL_MS);
+        setVisible(true);
+      }, FADE_MS);
     }, HOLD_MS);
 
     return () => {
       clearInterval(interval);
       if (swapTimeout.current) clearTimeout(swapTimeout.current);
-      if (raf1.current) cancelAnimationFrame(raf1.current);
-      if (raf2.current) cancelAnimationFrame(raf2.current);
     };
   }, []);
 
-  const rolling =
-    phase === "in"
-      ? "translate-y-0 opacity-100 transition-all ease-out"
-      : phase === "out"
-        ? "-translate-y-2.5 opacity-0 transition-all ease-in"
-        : "translate-y-2.5 opacity-0"; // positioned below, no transition — about to roll up
-
   return (
-    <div className="mb-2 min-h-[2.4em] max-w-2xl overflow-hidden sm:min-h-[2.1em]">
+    <div className="mb-2 flex h-[6.6rem] max-w-2xl items-center justify-center sm:h-[9.4rem]">
       <h1
-        className={`text-balance text-center text-2xl font-semibold tracking-tight text-ink sm:text-4xl ${rolling}`}
-        style={{ transitionDuration: `${ROLL_MS}ms` }}
+        className={`text-balance text-center text-2xl font-semibold leading-snug tracking-tight text-ink transition-opacity ease-in-out sm:text-4xl ${
+          visible ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ transitionDuration: `${FADE_MS}ms` }}
       >
         {PROMPTS[index]}
       </h1>
